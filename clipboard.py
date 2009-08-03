@@ -36,7 +36,7 @@ class Clipboard():
                     except:
                         raise Exception("Failed.")
     
-    def getContent(self):
+    def get(self):
         """Retrieves the clipboard's current value."""
         if self.__USE == 'gtk':
             from gtk import Clipboard
@@ -53,7 +53,7 @@ class Clipboard():
             else: flag = ''
             return os.popen('%s -%so' % (self.__USE, flag)).read()
     
-    def setContent(self, text):
+    def set(self, text):
         """Sets the value of the clipboard to the supplied text."""
         if self.__USE == 'gtk':
             from gtk import Clipboard
