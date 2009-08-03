@@ -18,7 +18,7 @@ class Clipboard():
     def __findMethod(self):
         """Finds how to acquire (and set) clipboard contents for a given system type."""
         try:
-            import pygtk, gtk
+            import gtk
             self.__USE = 'gtk'
         except ImportError, e:
             import os
@@ -51,7 +51,10 @@ class Clipboard():
     def setContent(self, text):
         """Sets the value of the clipboard to the supplied text."""
         if self.__USE == 'gtk':
-            pass
+            from gtk import Clipboard
+            clip = Clipboard()
+            clip.set_text(text)
+            clip.store()
         elif self.__USE == 'win32':
             pass
         elif self.__USE == 'pbpaste': # OS X needs pbcopy to write
@@ -59,4 +62,6 @@ class Clipboard():
             os.popen('pbcopy', 'wb').write(text)
         else:
             import os
-            os.popen(self.__USE, 'wb').write(text)
+            if self.__USE == 'xsel': flag = 'b'
+            else: flag = ''
+            os.popen('%s -%si' % (self.__USE, flag), 'wb').write(text)
