@@ -1,3 +1,9 @@
+# Exceptions
+class ProgramNotFound(Exception):
+    def __init__(self):
+        pass
+
+# Other
 class Clipboard():
     """Provides methods (setContent and getContent) to retrieve
         and modify clipboard values for a variety of systems (mainly
@@ -23,17 +29,17 @@ class Clipboard():
         except ImportError, e:
             import os
             try:
-                if os.popen('which pbpaste').read() == '': raise Exception
+                if os.popen('which pbpaste').read() == '': raise ProgramNotFound()
                 else: self.__USE = 'pbpaste'
-            except:
+            except ProgramNotFound():
                 try:
                     if os.popen('which xsel').read() == '': raise Exception
                     else: self.__USE = 'xsel'
-                except:
+                except ProgramNotFound():
                     try:
                         if os.popen('which xclip').read() == '': raise Exception
                         else: self.__USE = 'xclip'
-                    except:
+                    except ProgramNotFound():
                         raise Exception("Failed.")
     
     def get(self):
